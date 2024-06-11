@@ -28,13 +28,13 @@ public class Parqueadero {
         for (Puesto puesto : puestos) {
             Carro carro = puesto.getCarro();
             if (carro != null && carro.getPlaca().equals(placa)) {
-                int horasParqueado = calcularHorasParqueado(carro.getHoraEntrada());
+                int horasParqueado = carro.getHorasParqueo();
                 ingresos += horasParqueado * tarifa;
                 puesto.desocuparPuesto();
                 return horasParqueado;
             }
         }
-        return -1; // Carro no encontrado
+        return -1;
     }
 
     public double informarIngresos() {
@@ -65,7 +65,7 @@ public class Parqueadero {
     public boolean hayCarroCon24Horas() {
         for (Puesto puesto : puestos) {
             Carro carro = puesto.getCarro();
-            if (carro != null && calcularHorasParqueado(carro.getHoraEntrada()) >= 24) {
+            if (carro != null && carro.getHorasParqueo() >= 24) {
                 return true;
             }
         }
@@ -83,8 +83,27 @@ public class Parqueadero {
         return count;
     }
 
-    private int calcularHorasParqueado(int horaEntrada) {
-        // Simulación de cálculo de horas, debes ajustar esto según el reloj del parqueadero
-        return 8; // Valor ejemplo, ajusta según la lógica de tu aplicación
+    public void avanzarReloj(int horas) {
+        for (Puesto puesto : puestos) {
+            Carro carro = puesto.getCarro();
+            if (carro != null) {
+                carro.setHoraEntrada(carro.getHoraEntrada() + horas);
+            }
+        }
+    }
+
+    public void cambiarTarifa(double nuevaTarifa) {
+        this.tarifa = nuevaTarifa;
+    }
+
+    public boolean establecerHorasParqueo(String placa, int horasParqueo) {
+        for (Puesto puesto : puestos) {
+            Carro carro = puesto.getCarro();
+            if (carro != null && carro.getPlaca().equals(placa)) {
+                carro.setHorasParqueo(horasParqueo);
+                return true;
+            }
+        }
+        return false;
     }
 }
